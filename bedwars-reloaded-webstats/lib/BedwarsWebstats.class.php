@@ -17,7 +17,7 @@
 
 class BedwarsWebstats extends BedwarsDependency
 {
-	public const DB_TABLENAME = 'stats_players';
+	const DB_TABLENAME = 'stats_players';
 	
 	private $page = null;
 	private $perpage = null;

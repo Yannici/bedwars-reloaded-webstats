@@ -18,7 +18,7 @@
 class BedwarsWebstatsInjector
 {
 	
-	public const DB_PREFIX = 'bw_';
+	const DB_PREFIX = 'bw_';
 	
 	private $db = null;
 	private $config = null;
