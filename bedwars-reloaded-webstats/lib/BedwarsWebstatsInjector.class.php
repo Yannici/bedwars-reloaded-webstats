@@ -39,13 +39,13 @@ class BedwarsWebstatsInjector
 		$this->config = $config;
 		$this->texts = $texts;
 		
+		$this->router = new BedwarsRouter();
+		
 		if(!isset($config['database'])) {
 			$this->db = new BedwarsDatabase(['database' => []]);
-			return;
 		}
 		
 		$this->db = new BedwarsDatabase($config['database']);
-		$this->router = new BedwarsRouter();
 	}
 	
 	/**
