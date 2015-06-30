@@ -56,6 +56,7 @@ class BedwarsPlayerStats extends BedwarsDatabaseEntry
 		$this->setValue('destroyedBeds', 0);
 		$this->setValue('score', 0);
 		$this->setValue('games', 0);
+		$this->setValue('kd', 0);
 	}
 	
 	/**
