@@ -18,6 +18,9 @@
 class BedwarsRouter extends BedwarsDependency
 {
 	
+	/**
+	 * @var BedwarsWebstats
+	 */
 	private $webstats = null;
 	
 	public function __construct()
@@ -51,6 +54,24 @@ class BedwarsRouter extends BedwarsDependency
 		}
 		
 		require($filename);
+	}
+	
+	/**
+	 * Returns the webstats path
+	 * @return string
+	 */
+	public function getPath()
+	{
+		return $this->webstats->getPath();
+	}
+	
+	/**
+	 * Checks if the table is filtered or ordered
+	 * @return boolean
+	 */
+	public function isFiltered()
+	{
+		return (isset($_GET['bw-search']) || isset($_GET['bw-order']) || isset($_GET['bw-direction']) || isset($_GET['bw-page']));
 	}
 	
 }

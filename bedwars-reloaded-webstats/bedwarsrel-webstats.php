@@ -26,6 +26,9 @@ spl_autoload_register('autoload', false);
 // require config
 require_once('includes/config.inc.php');
 
+// require texts
+require_once('includes/texts.inc.php');
+
 $injector = new BedwarsWebstatsInjector($config, $texts);
 $injector->initialize();
 ?>

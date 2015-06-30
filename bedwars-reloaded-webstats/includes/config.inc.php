@@ -27,21 +27,4 @@ $config = array(
 	'order' => 'score',
 	'direction' => 'DESC' // ASC (ascending) or DESC (descending)
 );
-
-$texts = array(
-	'stats.column.name' => 'Spielername',
-	'stats.column.uuid' => 'UUID',
-	'stats.column.kills' => 'Kills',
-	'stats.column.deaths' => 'Tode',
-	'stats.column.kd' => 'K/D',
-	'stats.column.score' => 'Punkte',
-	'stats.column.games' => 'Spiele',
-	'stats.column.destroyedBeds' => 'zerstörte Betten',
-	'stats.column.id' => 'ID',
-	'stats.column.loses' => 'Verloren',
-	'stats.column.wins' => 'Gewonnen',
-	'search' => 'Suche',
-	'search.placeholder' => 'Suchen ...',
-	'search.button' => 'Suchen &raquo;'
-);
 ?>

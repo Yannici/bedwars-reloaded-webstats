@@ -23,6 +23,7 @@ class BedwarsWebstats extends BedwarsDependency
 	 * Parameters
 	 */
 	private $page = null;
+	private $maxPage = null;
 	private $perpage = null;
 	private $order = null;
 	private $orderDirection = null;
@@ -88,6 +89,17 @@ class BedwarsWebstats extends BedwarsDependency
 		if(!$stmt) {
 			trigger_error('Couldn\'t fetch data for webstats! Please contact the administrator!', E_WARNING);
 			return;
+		}
+		
+		$max = $this->getInjector()->getDB()->query("SELECT COUNT(*) AS `max` FROM " . $table);
+		
+		if(!$max) {
+			trigger_error('Couldn\'t fetch data for webstats! Please contact the administrator!', E_WARNING);
+			return;
+		}
+		
+		foreach($max as $row) {
+			$this->maxPage = floor($row['max']/$this->perpage);
 		}
 		
 		foreach($result as $row) {
@@ -193,6 +205,15 @@ class BedwarsWebstats extends BedwarsDependency
 	public function getCurrentSearch()
 	{
 		return htmlspecialchars($this->search);
+	}
+	
+	/**
+	 * Return the maximum pages available
+	 * @return number
+	 */
+	public function getMaxPage()
+	{
+		return $this->maxPage;
 	}
 
 	/**
