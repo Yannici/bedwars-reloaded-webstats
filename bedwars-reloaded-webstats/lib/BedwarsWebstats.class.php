@@ -87,14 +87,14 @@ class BedwarsWebstats extends BedwarsDependency
 		}
 		
 		if(!$stmt) {
-			trigger_error('Couldn\'t fetch data for webstats! Please contact the administrator!', E_WARNING);
+			trigger_error('Couldn\'t fetch data for webstats! Please contact the administrator!', E_USER_WARNING);
 			return;
 		}
 		
 		$max = $this->getInjector()->getDB()->query("SELECT COUNT(*) AS `max` FROM " . $table);
 		
 		if(!$max) {
-			trigger_error('Couldn\'t fetch data for webstats! Please contact the administrator!', E_WARNING);
+			trigger_error('Couldn\'t fetch data for webstats! Please contact the administrator!', E_USER_WARNING);
 			return;
 		}
 		

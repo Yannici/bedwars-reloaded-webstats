@@ -68,7 +68,7 @@ class BedwarsWebstatsInjector
 		try {
 			$this->db->open();
 		} catch(Exception $ex) {
-			trigger_error('Error while initialize bedwars webstats: ' . $ex->getMessage(), E_WARNING);
+			trigger_error('Error while initialize bedwars webstats: ' . $ex->getMessage(), E_USER_WARNING);
 		}
 	}
 	

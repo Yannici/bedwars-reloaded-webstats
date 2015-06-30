@@ -46,7 +46,7 @@ class BedwarsDatabase
 				|| !isset($dbConfig['user']) 
 				|| !isset($dbConfig['db']) 
 				|| !isset($dbConfig['pw'])) {
-			trigger_error('Couldn\'t initialize database object! Please check your config!', E_WARNING);
+			trigger_error('Couldn\'t initialize database object! Please check your config!', E_USER_WARNING);
 			$this->initializeError = true;
 			return;
 		}
