@@ -45,6 +45,7 @@ class BedwarsWebstatsInjector
 		}
 		
 		$this->db = new BedwarsDatabase($config['database']);
+		$this->router = new BedwarsRouter();
 	}
 	
 	/**
@@ -127,6 +128,24 @@ class BedwarsWebstatsInjector
 	public function getConnection()
 	{
 		return $this->db->getConnection();
+	}
+	
+	/**
+	 * Returns the configured path to the webstats
+	 */
+	public function getPath()
+	{
+		return $this->config['path'];
+	}
+	
+	/**
+	 * Returns the router of this application
+	 * 
+	 * @return BedwarsRouter
+	 */
+	public function getRouter()
+	{
+		return $this->router;
 	}
 	
 }

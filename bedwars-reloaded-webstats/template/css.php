@@ -14,18 +14,6 @@
                                   by Yannici
  
  */
-
-// Add class-autoloader
-function autoload($class) {
-	require_once('./lib/' . $class . '.class.php');
-}
-
-// register autoloader
-spl_autoload_register('autoload', false);
-
-// require config
-require_once('includes/config.inc.php');
-
-$injector = new BedwarsWebstatsInjector($config, $texts);
-$injector->initialize();
 ?>
+<link rel="stylesheet" href="<?php echo $this->getInjector()->getPath(); ?>/assets/css/bootstrap.min.css">
+<link rel="stylesheet" href="<?php echo $this->getInjector()->getPath(); ?>/assets/css/bootstrap-theme.min.css">

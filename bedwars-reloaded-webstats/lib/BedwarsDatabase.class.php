@@ -72,6 +72,11 @@ class BedwarsDatabase
 	 */
 	public function open()
 	{
+		if($this->initializeError) {
+			throw new BadMethodCallException('The BedwarsDatabase instance wasn\'t initialized succesful. 
+					You can\'t open a database connection!');
+		}
+		
 		try {
 			// Create new PDO connection
 			$this->connection = new PDO(
@@ -85,6 +90,28 @@ class BedwarsDatabase
 		} catch(PDOException $ex) {
 			throw $ex;
 		}
+	}
+	
+	/**
+	 * Executes a sql-statement
+	 * 
+	 * @param string $sql
+	 * @return PDOStatement
+	 */
+	public function query($sql)
+	{
+		return $this->connection->query($sql);
+	}
+	
+	/**
+	 * Preparing an statement for executing
+	 * 
+	 * @param string $statement
+	 * @return PDOStatement
+	 */
+	public function prepare($statement) 
+	{
+		return $this->connection->prepare($statement);
 	}
 	
 	/**

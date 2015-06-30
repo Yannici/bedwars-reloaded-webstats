@@ -15,17 +15,23 @@
  
  */
 
-// Add class-autoloader
-function autoload($class) {
-	require_once('./lib/' . $class . '.class.php');
-}
+require_once('bedwarsrel-webstats.php');
 
-// register autoloader
-spl_autoload_register('autoload', false);
-
-// require config
-require_once('includes/config.inc.php');
-
-$injector = new BedwarsWebstatsInjector($config, $texts);
-$injector->initialize();
+$webstats = new BedwarsWebstats()
 ?>
+<!DOCTYPE html5>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Bedwars-Webstats :: Example</title>
+		<?php $webstats->displayCss(); ?>
+	</head>
+	<body>
+	<div class="container">
+		<h1>Bedwars-Reloaded Webstats</h1>
+		<?php $webstats->view('http://localhost/webstats/example.php', false); ?>
+	</div>
+	
+	<?php $webstats->displayJs(); ?>
+	</body>
+</html>

@@ -19,12 +19,23 @@ class BedwarsWebstats extends BedwarsDependency
 {
 	const DB_TABLENAME = 'stats_players';
 	
+	/*
+	 * Parameters
+	 */
 	private $page = null;
 	private $perpage = null;
 	private $order = null;
 	private $orderDirection = null;
 	private $search = null;
+	
+	private $path = null;
 
+	/*
+	 * Stats
+	 */
+	private $stats = array();
+	
+	// On error
 	private $errors = array();
 
 	public function __construct()
@@ -53,45 +64,70 @@ class BedwarsWebstats extends BedwarsDependency
 	
 	private function loadStats()
 	{
-		$con = $this->getInjector()->getConnection();
 		$table = BedwarsWebstatsInjector::DB_PREFIX . self::DB_TABLENAME;
 		
-		$pageStart = ($perpage * $page) - $perpage;
+		$pageStart = ($this->perpage * $this->page) - $this->perpage;
+		if($pageStart <= 0) {
+			$pageStart = 0;
+		}
 		
-		$stmt = $con->query('SELECT * FROM ' . $table . ' ORDER BY ' . $this->order . ' ' . $this->orderDirection . ' LIMIT ' . $pageStart . ', ' . $this->perpage);
+		$stmt = null;
+		$result = [];
+		
+		if($this->search !== null) {
+			$search = '%' . $this->search . '%';
+			$stmt = $this->getInjector()->getDB()->prepare("SELECT * FROM " . $table . " WHERE `name` LIKE :name ORDER BY " . $this->order . " " . $this->orderDirection . " LIMIT " . $pageStart . ", " . $this->perpage);
+			$stmt->bindParam(':name', $search, PDO::PARAM_STR);
+			$stmt->execute();
+			$result = $stmt->fetchAll();
+		} else {
+			$stmt = $this->getInjector()->getDB()->query('SELECT * FROM ' . $table . ' ORDER BY ' . $this->order . ' ' . $this->orderDirection . ' LIMIT ' . $pageStart . ', ' . $this->perpage);
+			$result = $stmt;
+		}
+		
 		if(!$stmt) {
 			trigger_error('Couldn\'t fetch data for webstats! Please contact the administrator!', E_WARNING);
 			return;
 		}
 		
-		foreach($stmt as $row) {
-			
+		foreach($result as $row) {
+			$this->stats[] = new BedwarsPlayerStats($row);
 		}
 	}
 
+	/**
+	 * Loading every parameter and finally the stats
+	 */
 	private function load()
 	{
-		$inj = $this->getInjector();
-		
-		$this->perpage = $inj->getConfig()['per-page'];
-		$this->page = $this->loadPage();
-		$this->order = (isset($_GET['bw-order'])) ? $_GET['bw-order'] : $inj->getConfig()['order'];
-		$this->orderDirection = strtoupper((isset($_GET['bw-direction'])) ? $_GET['bw-direction'] : $inj->getConfig()['direction']);
-		
-		if($this->perpage <= 0) {
-			$this->perpage = 10;
+		try  {
+			$inj = $this->getInjector();
+			
+			$this->path = $this->getInjector()->getPath();
+			
+			$this->perpage = $inj->getConfig()['per-page'];
+			$this->page = $this->loadPage();
+			$this->order = (isset($_GET['bw-order'])) ? $_GET['bw-order'] : $inj->getConfig()['order'];
+			$this->orderDirection = strtoupper((isset($_GET['bw-direction'])) ? $_GET['bw-direction'] : $inj->getConfig()['direction']);
+			$this->search = (isset($_GET['bw-search'])) ? $_GET['bw-search'] : null;
+			
+			if($this->perpage <= 0) {
+				$this->perpage = 10;
+			}
+			
+			if($this->orderDirection != 'ASC'
+					&& $this->orderDirection != 'DESC') {
+				$this->orderDirection = 'ASC';
+			}
+	
+			if(!in_array($this->order, BedwarsPlayerStats::$COLUMNS)) {
+				$this->order = $inj->getConfig()['order'];
+			}
+	
+			$this->loadStats();
+		} catch(Exception $ex) {
+			trigger_error('#' . $ex->getCode() . ' Error in loading bedwars webstats: ' . $ex->getMessage());
 		}
-		
-		if($this->orderDirection != 'ASC' 
-				&& $this->orderDirection != 'DESC') {
-			$this->orderDirection = 'ASC';
-		}
-		
-		if(!in_array($this->order, BedwarsPlayerStats::$COLUMNS)) {
-			$this->order = $inj->getConfig()['order'];
-		}
-		
-		$this->loadStats();
 	}
 	
 	/**
@@ -103,25 +139,111 @@ class BedwarsWebstats extends BedwarsDependency
 	{
 		return $this->errors;
 	}
+	
+	/**
+	 * Returns the current stats
+	 * @return multitype:string,int
+	 */
+	public function getStats()
+	{
+		return $this->stats;
+	}
+	
+	
+	/**
+	 * Returns the current order field
+	 * @return string the field which is ordered by
+	 */
+	public function getCurrentOrder()
+	{
+		return $this->order;
+	}
+	
+	/**
+	 * Returns the current order direction
+	 * @return string current order direction
+	 */
+	public function getCurrentOrderDirection()
+	{
+		return $this->orderDirection;
+	}
+	
+	/**
+	 * Returns the current displaying page
+	 * @return number
+	 */
+	public function getPage()
+	{
+		return intval($this->page);
+	}
+	
+	/**
+	 * Returns the number how much items are displayed per page
+	 * @return number
+	 */
+	public function getPerPage()
+	{
+		return intval($this->perpage);
+	}
+	
+	/**
+	 * Returns the current search string
+	 * @return string	 
+	 */
+	public function getCurrentSearch()
+	{
+		return htmlspecialchars($this->search);
+	}
 
 	/**
 	 * Easy output of the whole webstats
 	 * prepared by the webstats api
 	 * 
+	 * @param string $path The path where the view is displaying
 	 * @param boolean $withJs Include Javascript-Resources
-	 * @param boolean $withCss Include CSS-Resources
 	 */
-	public function view($withJs = true, $withCss = true)
+	public function view($path = null, $withJs = true)
 	{
-		// Use output buffer to first collect any output
-		ob_start();
+		if($path !== null) {
+			if(substr($path, -1) == '/') {
+				$path = substr($path, 0, strlen($path)-1);
+			}
+			
+			$this->path = $path;
+		}
 		
+		$this->getInjector()->getRouter()->display('stats', $this);
 		
-		// output the buffer and end it
-		ob_end_flush();
+		if($withJs) {
+			$this->getInjector()->getRouter()->display('js');
+		}
 	}
 	
+	/**
+	 * Returns the current webstats path
+	 * 
+	 * @return string
+	 */
+	public function getPath()
+	{
+		return $this->path;
+	}
 	
+	/**
+	 * Displays the needed css ressources
+	 */
+	public function displayCss()
+	{
+		$this->getInjector()->getRouter()->display('css');
+	}
+	
+	/**
+	 * Displays the needed js ressources
+	 */
+	public function displayJs()
+	{
+		$this->getInjector()->getRouter()->display('js');
+	}
 	
 }
 

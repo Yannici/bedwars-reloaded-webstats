@@ -18,21 +18,30 @@
 class BedwarsPlayerStats extends BedwarsDatabaseEntry
 {
 	
-	public static final $COLUMNS = array(
+	public static $COLUMNS = array(
 			'name',
 			'uuid',
 			'kills',
 			'deaths',
+			'kd',
+			'games',
 			'wins',
 			'loses',
 			'destroyedBeds',
-			'score',
-			'games'
+			'score'
 	);
 	
 	public function __construct($entry = array())
 	{
 		parent::__construct($entry);
+	}
+	
+	/**
+	 * @see BedwarsDatabaseEntry::getColumns()
+	 */
+	public function getColumns()
+	{
+		return self::$COLUMNS;
 	}
 	
 	/**
@@ -63,6 +72,6 @@ class BedwarsPlayerStats extends BedwarsDatabaseEntry
 		}
 		
 		return true;
-	}	
+	}
 	
 }

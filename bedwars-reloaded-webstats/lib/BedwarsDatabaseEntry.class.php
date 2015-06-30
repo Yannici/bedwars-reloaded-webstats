@@ -25,6 +25,10 @@ abstract class BedwarsDatabaseEntry extends BedwarsDependency
 		parent::__construct();
 		
 		$this->entry = $entry;
+		if(!isset($this->entry['id'])
+				|| !$this->validateEntry()) {
+			$this->setDefault();
+		}
 	}
 	
 	/**
@@ -36,6 +40,11 @@ abstract class BedwarsDatabaseEntry extends BedwarsDependency
 	 * Sets the default values for all fields
 	 */
 	public abstract function setDefault();
+	
+	/**
+	 * Returns the columns/fields of this entry
+	 */
+	public abstract function getColumns();
 
 	/**
 	 * Returns the full entry
@@ -79,6 +88,40 @@ abstract class BedwarsDatabaseEntry extends BedwarsDependency
 		}
 		
 		return $this->entry[$key];
+	}
+	
+	public function __get($name)
+	{
+		if(property_exists($this, $name)) {
+			return $this->{$name};
+		}
+		
+		if(in_array($name, $this->getColumns())) {
+			return $this->getValue($name);
+		}
+		
+		$trace = debug_backtrace();
+		trigger_error(
+		'Undefinierte Eigenschaft für __get(): ' . $name .
+		' in ' . $trace[0]['file'] .
+		' Zeile ' . $trace[0]['line'],
+		E_USER_NOTICE);
+		return null;
+	}
+	
+	public function __set($name, $value)
+	{
+		if(in_array($name, $this->getColumns())) {
+			$this->setValue($name, $value);
+			return;
+		}
+		
+		$trace = debug_backtrace();
+		trigger_error(
+		'Undefinierte Eigenschaft für __set(): ' . $name .
+		' in ' . $trace[0]['file'] .
+		' Zeile ' . $trace[0]['line'],
+		E_USER_NOTICE);
 	}
 	
 }
