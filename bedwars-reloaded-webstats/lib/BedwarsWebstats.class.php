@@ -231,13 +231,14 @@ class BedwarsWebstats extends BedwarsDependency
 		}
 		
 		$fullUrl = array_shift($parts);
+		$parts = explode('&', $parts[1]);
 		$params = '';
 		foreach($parts as $part) {
 			if(!in_array($part, $bwParams)) {
 				if($params == '') {
 					$params = '?' . $part;
 				} else {
-					$params = '&' . $part;
+					$params .= '&' . $part;
 				}
 			}
 		}
