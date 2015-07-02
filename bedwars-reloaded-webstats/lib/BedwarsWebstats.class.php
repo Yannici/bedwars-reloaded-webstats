@@ -215,6 +215,19 @@ class BedwarsWebstats extends BedwarsDependency
 	{
 		return $this->maxPage;
 	}
+	
+	private function getFilteredUrl($url)
+	{
+		$parts = explode('?', $url);
+		if(count($parts) === 1) {
+			return $parts[0];
+		}
+		
+		$fullUrl = array_shift($parts);
+		foreach($parts as $part) {
+			
+		}
+	}
 
 	/**
 	 * Easy output of the whole webstats
@@ -223,15 +236,9 @@ class BedwarsWebstats extends BedwarsDependency
 	 * @param string $path The path where the view is displaying
 	 * @param boolean $withJs Include Javascript-Resources
 	 */
-	public function view($path = null, $withJs = true)
+	public function view($withJs = true)
 	{
-		if($path !== null) {
-			if(substr($path, -1) == '/') {
-				$path = substr($path, 0, strlen($path)-1);
-			}
-			
-			$this->path = $path;
-		}
+		$this->path = $this->getFilteredUrl($_SERVER['REQUEST_URI']);
 		
 		$this->getInjector()->getRouter()->display('stats', $this);
 		

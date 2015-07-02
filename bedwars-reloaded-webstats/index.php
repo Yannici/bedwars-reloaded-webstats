@@ -30,7 +30,7 @@ $webstats = new BedwarsWebstats()
 	<body>
 	<div class="container">
 		<h1>Bedwars-Reloaded Webstats</h1>
-		<?php $webstats->view('http://localhost/webstats/example.php', false); ?>
+		<?php $webstats->view(false); ?>
 	</div>
 	
 	<?php $webstats->displayJs(); ?>
