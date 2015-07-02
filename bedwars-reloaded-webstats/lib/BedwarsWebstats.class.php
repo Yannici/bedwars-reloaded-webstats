@@ -218,15 +218,31 @@ class BedwarsWebstats extends BedwarsDependency
 	
 	private function getFilteredUrl($url)
 	{
+		$bwParams = array(
+			'bw-page',
+			'bw-order',
+			'bw-direction',
+			'bw-search'
+		);
+		
 		$parts = explode('?', $url);
 		if(count($parts) === 1) {
 			return $parts[0];
 		}
 		
 		$fullUrl = array_shift($parts);
+		$params = '';
 		foreach($parts as $part) {
-			
+			if(!in_array($part, $bwParams)) {
+				if($params == '') {
+					$params = '?' . $part;
+				} else {
+					$params = '&' . $part;
+				}
+			}
 		}
+		
+		return $fullUrl . $params;
 	}
 
 	/**
