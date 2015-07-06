@@ -53,7 +53,7 @@
 			</tr>
 			<?php foreach($this->getWebstats()->getStats() as $stats): ?>
 				<tr>
-					<td><?php echo '<strong>' . $stats['rank'] . '</strong>'; ?></td>
+					<td><?php echo '<strong>' . $stats->getValue('rank') . '</strong>'; ?></td>
 					<?php foreach(BedwarsPlayerStats::$COLUMNS as $column): ?>
 						<?php if($column == 'score'): ?>
 							<td><strong><?php echo $stats->$column; ?></strong></td>
