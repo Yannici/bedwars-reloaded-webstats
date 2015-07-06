@@ -74,15 +74,16 @@ class BedwarsWebstats extends BedwarsDependency
 		
 		$stmt = null;
 		$result = [];
+		$rank = '(SELECT COUNT(*)+1 FROM ' . $table . ' WHERE ' . $this->order . ' >  bw.' . $this->order . ') AS rank';
 		
 		if($this->search !== null) {
 			$search = '%' . $this->search . '%';
-			$stmt = $this->getInjector()->getDB()->prepare("SELECT * FROM " . $table . " WHERE `name` LIKE :name ORDER BY " . $this->order . " " . $this->orderDirection . " LIMIT " . $pageStart . ", " . $this->perpage);
+			$stmt = $this->getInjector()->getDB()->prepare("SELECT *, " . $rank . " FROM " . $table . " bw WHERE `name` LIKE :name ORDER BY " . $this->order . " " . $this->orderDirection . " LIMIT " . $pageStart . ", " . $this->perpage);
 			$stmt->bindParam(':name', $search, PDO::PARAM_STR);
 			$stmt->execute();
 			$result = $stmt->fetchAll();
 		} else {
-			$stmt = $this->getInjector()->getDB()->query('SELECT * FROM ' . $table . ' ORDER BY ' . $this->order . ' ' . $this->orderDirection . ' LIMIT ' . $pageStart . ', ' . $this->perpage);
+			$stmt = $this->getInjector()->getDB()->query('SELECT *, ' . $rank . ' FROM ' . $table . ' bw ORDER BY ' . $this->order . ' ' . $this->orderDirection . ' LIMIT ' . $pageStart . ', ' . $this->perpage);
 			$result = $stmt;
 		}
 		

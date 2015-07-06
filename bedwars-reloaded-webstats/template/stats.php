@@ -36,6 +36,7 @@
 	<div class="col-md-12">
 		<table class="table table-striped">
 			<tr>
+				<th><?php echo $this->getInjector()->_('stats.column.rank'); ?></th>
 				<?php foreach(BedwarsPlayerStats::$COLUMNS as $column): ?>
 					<?php if($column == 'uuid') continue; ?>
 					<th>
@@ -52,6 +53,7 @@
 			</tr>
 			<?php foreach($this->getWebstats()->getStats() as $stats): ?>
 				<tr>
+					<td><?php echo '<strong>' . $stats['rank'] . '</strong>'; ?></td>
 					<?php foreach(BedwarsPlayerStats::$COLUMNS as $column): ?>
 						<?php if($column == 'score'): ?>
 							<td><strong><?php echo $stats->$column; ?></strong></td>
