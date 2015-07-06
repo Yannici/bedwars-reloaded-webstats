@@ -26,6 +26,7 @@ $texts = array(
 	'stats.column.id' => 'ID',
 	'stats.column.loses' => 'Verloren',
 	'stats.column.wins' => 'Gewonnen',
+	'stats.column.rank' => 'Rank',
 	'search' => 'Suche',
 	'search.placeholder' => 'Suchen ...',
 	'search.button' => 'Suchen &raquo;',
