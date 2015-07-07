@@ -350,7 +350,6 @@ class BedwarsWebstats extends BedwarsDependency
 	 * Easy output of the whole webstats
 	 * prepared by the webstats api
 	 * 
-	 * @param string $path The path where the view is displaying
 	 * @param boolean $withJs Include Javascript-Resources
 	 * 
 	 * @return void
