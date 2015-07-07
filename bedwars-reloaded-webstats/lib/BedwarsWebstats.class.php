@@ -15,30 +15,99 @@
  
  */
 
+/**
+ * BedwarsWebstats.class.php
+ */
+
+/**
+ * Represents the whole webstats (Webstats dependency) 
+ * (more or less the bedwars webstats table)
+ * 
+ * @author Yannici
+ *
+ */
 class BedwarsWebstats extends BedwarsDependency
 {
+	/**
+	 * Returns the tablename of this database table
+	 * 
+	 * @var string
+	 */
 	const DB_TABLENAME = 'stats_players';
 	
-	/*
-	 * Parameters
+	/**
+	 * Get-Parameter: bw-page  
+	 * The current page of the bedwars webstats
+	 * 
+	 * @var int
 	 */
 	private $page = null;
+	
+	/**
+	 * The pages the webstats have
+	 * 
+	 * @var int
+	 */
 	private $maxPage = null;
+	
+	/**
+	 * Config-Parameter: per-page  
+	 * The stats per page
+	 * 
+	 * @var int
+	 */
 	private $perpage = null;
+	
+	/**
+	 * Get-Parameter: bw-order  
+	 * The column which is ordered by
+	 * 
+	 * @var string
+	 */
 	private $order = null;
+	
+	/**
+	 * Get-Parameter: bw-direction  
+	 * The direction of the order (_ASC_ or _DESC_)
+	 * 
+	 * @var string
+	 */
 	private $orderDirection = null;
+	
+	/**
+	 * Get-Parameter: bw-search  
+	 * The search parameter which is searched for
+	 * 
+	 * @var string
+	 */
 	private $search = null;
 	
+	/**
+	 * The current path where the webstats are displayed  
+	 * This is used for every url on the webstats template
+	 * 
+	 * @var string
+	 */
 	private $path = null;
 
-	/*
-	 * Stats
+	/**
+	 * The full stats information is stored here
+	 * 
+	 * @var array
 	 */
 	private $stats = array();
 	
-	// On error
+	/**
+	 * The errors will be stored in this member
+	 * 
+	 * @var array
+	 */
 	private $errors = array();
 
+	/**
+	 * Initialize a new instance of the BedwarsWebstats-class
+	 * and loads the webstats which will be displayed on the current webstats-page
+	 */
 	public function __construct()
 	{
 		parent::__construct();
@@ -46,6 +115,11 @@ class BedwarsWebstats extends BedwarsDependency
 		$this->load();
 	}
 	
+	/**
+	 * Calculate the current page with help of the _GET-Parameter_
+	 * 
+	 * @return int
+	 */
 	private function loadPage()
 	{
 		$page = 0;
@@ -63,6 +137,12 @@ class BedwarsWebstats extends BedwarsDependency
 		return $page;
 	}
 	
+	/**
+	 * Loads the stats from the database with help of the database
+	 * connection stored in the injector instance
+	 * 
+	 * @return void
+	 */
 	private function loadStats()
 	{
 		$table = BedwarsWebstatsInjector::DB_PREFIX . self::DB_TABLENAME;
@@ -110,7 +190,9 @@ class BedwarsWebstats extends BedwarsDependency
 	}
 
 	/**
-	 * Loading every parameter and finally the stats
+	 * Loading every needed parameter and finally the stats
+	 * 
+	 * @return void
 	 */
 	private function load()
 	{
@@ -147,7 +229,7 @@ class BedwarsWebstats extends BedwarsDependency
 	/**
 	 * Returns the errors (as array) which were generated
 	 * 
-	 * @return multitype:string
+	 * @return string
 	 */
 	public function getErrors()
 	{
@@ -155,18 +237,19 @@ class BedwarsWebstats extends BedwarsDependency
 	}
 	
 	/**
-	 * Returns the current stats
-	 * @return multitype:string,int
+	 * Returns the current stats as multi-dimensional array
+	 * 
+	 * @return array
 	 */
 	public function getStats()
 	{
 		return $this->stats;
 	}
 	
-	
 	/**
 	 * Returns the current order field
-	 * @return string the field which is ordered by
+	 * 
+	 * @return string The field which is ordered by
 	 */
 	public function getCurrentOrder()
 	{
@@ -175,7 +258,7 @@ class BedwarsWebstats extends BedwarsDependency
 	
 	/**
 	 * Returns the current order direction
-	 * @return string current order direction
+	 * @return string Current order direction
 	 */
 	public function getCurrentOrderDirection()
 	{
@@ -184,7 +267,8 @@ class BedwarsWebstats extends BedwarsDependency
 	
 	/**
 	 * Returns the current displaying page
-	 * @return number
+	 * 
+	 * @return int
 	 */
 	public function getPage()
 	{
@@ -193,7 +277,8 @@ class BedwarsWebstats extends BedwarsDependency
 	
 	/**
 	 * Returns the number how much items are displayed per page
-	 * @return number
+	 * 
+	 * @return int
 	 */
 	public function getPerPage()
 	{
@@ -202,6 +287,7 @@ class BedwarsWebstats extends BedwarsDependency
 	
 	/**
 	 * Returns the current search string
+	 * 
 	 * @return string	 
 	 */
 	public function getCurrentSearch()
@@ -211,13 +297,22 @@ class BedwarsWebstats extends BedwarsDependency
 	
 	/**
 	 * Return the maximum pages available
-	 * @return number
+	 * 
+	 * @return int
 	 */
 	public function getMaxPage()
 	{
 		return $this->maxPage;
 	}
 	
+	/**
+	 * Filters the _GET-Parameter_ which are used by the webstats 
+	 * and leave the other GET-Parameter in the url
+	 * 
+	 * @param string $url The url which will be filtered
+	 * 
+	 * @return string The filtered URL
+	 */
 	private function getFilteredUrl($url)
 	{
 		$bwParams = array(
@@ -257,6 +352,8 @@ class BedwarsWebstats extends BedwarsDependency
 	 * 
 	 * @param string $path The path where the view is displaying
 	 * @param boolean $withJs Include Javascript-Resources
+	 * 
+	 * @return void
 	 */
 	public function view($withJs = true)
 	{
@@ -281,6 +378,8 @@ class BedwarsWebstats extends BedwarsDependency
 	
 	/**
 	 * Displays the needed css ressources
+	 * 
+	 * @return void
 	 */
 	public function displayCss()
 	{
@@ -289,6 +388,8 @@ class BedwarsWebstats extends BedwarsDependency
 	
 	/**
 	 * Displays the needed js ressources
+	 * 
+	 * @return void
 	 */
 	public function displayJs()
 	{

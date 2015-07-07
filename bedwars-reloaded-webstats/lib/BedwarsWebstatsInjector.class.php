@@ -15,22 +15,67 @@
  
  */
 
+/**
+ * BedwarsWebstatsInjector.class.php
+ */
+
+/**
+ * This is the dependency injector of the webstats(-api)
+ * It is the core of the webstats and collects all dependencies
+ * 
+ * @author Yannici
+ *
+ */
 class BedwarsWebstatsInjector
 {
 	
+	/**
+	 * The prefix for every database table related to bedwars-reloaded
+	 * 
+	 * @var string
+	 */
 	const DB_PREFIX = 'bw_';
 	
+	/**
+	 * The database connection
+	 * 
+	 * @var BedwarsDatabase
+	 */
 	private $db = null;
+	
+	/**
+	 * The webstats configuration
+	 * 
+	 * @var array
+	 */
 	private $config = null;
+	
+	/**
+	 * The router of the webstats
+	 * 
+	 * @var BedwarsRouter
+	 */
 	private $router = null;
+	
+	/**
+	 * The texts which are used by the webstats template
+	 * 
+	 * @var array
+	 */
 	private $texts = null;
 	
+	/**
+	 * The current instance of the injector
+	 * 
+	 * @var BedwarsWebstatsInjector
+	 */
 	private static $instance = null;
 	
 	/**
 	 * Initialize a new instance of BedwarsWebstatsInjector class
 	 * 
-	 * @param array $config
+	 * @param array $config The configuration for the webstats
+	 * @param array $texts The texts used in the webstats (locale)
 	 */
 	public function __construct($config, $texts)
 	{
@@ -62,6 +107,8 @@ class BedwarsWebstatsInjector
 	
 	/**
 	 * Initialize the dependencies
+	 * 
+	 * @return void
 	 */
 	public function initialize()
 	{
@@ -74,6 +121,8 @@ class BedwarsWebstatsInjector
 	
 	/**
 	 * On destruct the dependencies should close
+	 * 
+	 * @return void
 	 */
 	public function __destruct()
 	{
@@ -131,7 +180,9 @@ class BedwarsWebstatsInjector
 	}
 	
 	/**
-	 * Returns the configured path to the webstats
+	 * Returns the configured path to the webstats-folder
+	 * 
+	 * @return string
 	 */
 	public function getPath()
 	{

@@ -15,9 +15,24 @@
  
  */
 
+/**
+ * BedwarsPlayerStats.class.php
+ */
+
+/**
+ * Represents one entry of the bedwars webstats table
+ * 
+ * @author Yannici
+ *
+ */
 class BedwarsPlayerStats extends BedwarsDatabaseEntry
 {
 	
+	/**
+	 * The columns of this entry (and so of the table, too)
+	 * 
+	 * @var array
+	 */
 	public static $COLUMNS = array(
 			'name',
 			'uuid',
@@ -31,13 +46,20 @@ class BedwarsPlayerStats extends BedwarsDatabaseEntry
 			'score'
 	);
 	
+	/**
+	 * Initialize a new instance of the BedwarsPlayerStats-class
+	 * 
+	 * @param array $entry A full entry which should be represented by the class-instance
+	 */
 	public function __construct($entry = array())
 	{
 		parent::__construct($entry);
 	}
 	
 	/**
-	 * @see BedwarsDatabaseEntry::getColumns()
+	 * Returns the columns of this entry or the whole table
+	 * 
+	 * @return array
 	 */
 	public function getColumns()
 	{
@@ -46,6 +68,8 @@ class BedwarsPlayerStats extends BedwarsDatabaseEntry
 	
 	/**
 	 * Sets default of every field of the entry
+	 * 
+	 * @return void
 	 */
 	public function setDefault()
 	{
@@ -60,7 +84,7 @@ class BedwarsPlayerStats extends BedwarsDatabaseEntry
 	}
 	
 	/**
-	 * Validates the entry and returns if the entry is ready for saving
+	 * Validates the entry and returns if the entry is valid
 	 * 
 	 * @return boolean
 	 */

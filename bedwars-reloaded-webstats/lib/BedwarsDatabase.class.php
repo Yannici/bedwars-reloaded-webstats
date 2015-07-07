@@ -15,30 +15,74 @@
  
  */
 
+/**
+ * BedwarsDatabase.class.php
+ */
+
+/**
+ * This class handles the database connection.
+ * 
+ * @author Yannici
+ * 
+ */
 class BedwarsDatabase
 {
 	
-	/*
-	 * Connection member
+	/**
+	 * The pdo database connection
+	 * 
+	 * @var PDO the pdo database conncetion
 	 */
 	private $connection = null;
 	
-	/*
-	 * Connection configs
+	/**
+	 * Database connection host
+	 * 
+	 * @var string The host of the database connection
 	 */
 	private $host = null;
+	
+	/**
+	 * The database user which will be used
+	 * 
+	 * @var string database user
+	 */
 	private $user = null;
+	
+	/**
+	 * The database with the stats-table in it
+	 * 
+	 * @var string database name
+	 */
 	private $db = null;
+	
+	/**
+	 * Password for the database user
+	 * 
+	 * @var string database password
+	 */
 	private $pw = null;
+	
+	/**
+	 * The charset which should be used in the database connection
+	 * 
+	 * @var string database connection charset
+	 */
 	private $charset = null;
 	
-	// Initialize error member
+	/**
+	 * Is true when an error occured on initialize
+	 * 
+	 * @var boolean had initialize error
+	 */
 	private $initializeError = false;
 	
 	/**
 	 * Initialize a new instance of the BedwarsDatabase class
 	 * 
-	 * @param array $dbConfig
+	 * @param array $dbConfig The database connection settings
+	 * 
+	 * @return void
 	 */
 	public function __construct($dbConfig)
 	{
@@ -60,6 +104,8 @@ class BedwarsDatabase
 	
 	/**
 	 * Closes the connection to the database
+	 * 
+	 * @return void
 	 */
 	public function close()
 	{
@@ -69,6 +115,8 @@ class BedwarsDatabase
 	/**
 	 * Opens the database connection or displays 
 	 * an error if something went wrong
+	 * 
+	 * @return void
 	 */
 	public function open()
 	{
@@ -93,10 +141,11 @@ class BedwarsDatabase
 	}
 	
 	/**
-	 * Executes a sql-statement
+	 * Executes a SQL and returns the statement
 	 * 
-	 * @param string $sql
-	 * @return PDOStatement
+	 * @param string $sql The _SQL_ which should be executed
+	 * 
+	 * @return PDOStatement 
 	 */
 	public function query($sql)
 	{
@@ -104,9 +153,10 @@ class BedwarsDatabase
 	}
 	
 	/**
-	 * Preparing an statement for executing
+	 * Prepares a statement for executing
 	 * 
-	 * @param string $statement
+	 * @param string $statement The statement (_SQL_)
+	 * 
 	 * @return PDOStatement
 	 */
 	public function prepare($statement) 

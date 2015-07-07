@@ -15,14 +15,29 @@
  
  */
 
+/**
+ * BedwarsRouter.class.php
+ */
+
+/**
+ * A webstats dependency which handles the routing of the webstats (order, search ...)
+ * 
+ * @author Yannici
+ *
+ */
 class BedwarsRouter extends BedwarsDependency
 {
 	
 	/**
+	 * The webstats instance
+	 * 
 	 * @var BedwarsWebstats
 	 */
 	private $webstats = null;
 	
+	/**
+	 * Initializes a new instance of the BedwarsRouter-class
+	 */
 	public function __construct()
 	{
 		parent::__construct();
@@ -39,9 +54,12 @@ class BedwarsRouter extends BedwarsDependency
 	}
 	
 	/**
-	 * Requires and displays the template
+	 * Requires (includes) and displays the template
 	 * 
-	 * @param string $template
+	 * @param string $template The template which should be displayed
+	 * @param BedwarsWebstats The webstats the template will get as information
+	 * 
+	 * @return void
 	 */
 	public function display($template, $webstats = null)
 	{
@@ -58,6 +76,7 @@ class BedwarsRouter extends BedwarsDependency
 	
 	/**
 	 * Returns the webstats path
+	 * 
 	 * @return string
 	 */
 	public function getPath()
@@ -67,6 +86,7 @@ class BedwarsRouter extends BedwarsDependency
 	
 	/**
 	 * Checks if the table is filtered or ordered
+	 * 
 	 * @return boolean
 	 */
 	public function isFiltered()

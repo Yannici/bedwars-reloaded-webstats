@@ -15,11 +15,31 @@
  
  */
 
+/**
+ * BedwarsDatabaseEntry.class.php
+ */
+
+/**
+ * This is the superclass of one database entry for one table
+ * 
+ * @author Yannici
+ *
+ */
 abstract class BedwarsDatabaseEntry extends BedwarsDependency
 {
 	
+	/**
+	 * Represents the entry as array
+	 * 
+	 * @var array database entry
+	 */
 	private $entry = null;
 	
+	/**
+	 * Initialize a new instance of the BedwarsDatabaseEntry-class
+	 * 
+	 * @param array $entry One database entry of the specific table
+	 */
 	public function __construct($entry = array())
 	{
 		parent::__construct();
@@ -33,21 +53,28 @@ abstract class BedwarsDatabaseEntry extends BedwarsDependency
 	
 	/**
 	 * Validates the entry checks if it is ready to store
+	 * 
+	 * @return boolean
 	 */
 	public abstract function validateEntry();
 	
 	/**
 	 * Sets the default values for all fields
+	 * 
+	 * @return void
 	 */
 	public abstract function setDefault();
 	
 	/**
 	 * Returns the columns/fields of this entry
+	 * 
+	 * @return array
 	 */
 	public abstract function getColumns();
 
 	/**
 	 * Returns the full entry
+	 * 
 	 * @return array <string>
 	 */
 	public function getEntry()
@@ -70,6 +97,8 @@ abstract class BedwarsDatabaseEntry extends BedwarsDependency
 	 * 
 	 * @param string $key Fieldname
 	 * @param string $value Value
+	 * 
+	 * @return void
 	 */
 	public function setValue($key, $value)
 	{
@@ -79,7 +108,9 @@ abstract class BedwarsDatabaseEntry extends BedwarsDependency
 	/**
 	 * Returns a value of a player stats field by key
 	 *
-	 * @param string $key
+	 * @param string $key The key/column from which the value should be returned
+	 * 
+	 * @return mixed
 	 */
 	public function getValue($key)
 	{
@@ -90,6 +121,13 @@ abstract class BedwarsDatabaseEntry extends BedwarsDependency
 		return $this->entry[$key];
 	}
 	
+	/**
+	 * Returns the value of a specific column in the specific entry
+	 * 
+	 * @param string $name The column name in the current entry which should be returned
+	 * 
+	 * @return mixed
+	 */
 	public function __get($name)
 	{
 		if(property_exists($this, $name)) {
@@ -109,6 +147,14 @@ abstract class BedwarsDatabaseEntry extends BedwarsDependency
 		return null;
 	}
 	
+	/**
+	 * Sets the $value of the given $name column in the current entry
+	 * 
+	 * @param string $name
+	 * @param mixed $value
+	 * 
+	 * @return void
+	 */
 	public function __set($name, $value)
 	{
 		if(in_array($name, $this->getColumns())) {
