@@ -74,8 +74,9 @@ class BedwarsWebstats extends BedwarsDependency
 		
 		$stmt = null;
 		$result = [];
-		$rank = '(SELECT COUNT(*)+1 FROM ' . $table . ' WHERE ' . $this->order . ' >  bw.' . $this->order . ') AS rank';
-		
+		$defaultOrder = $this->getInjector()->getConfig()['order'];
+		$rank = '(SELECT COUNT(*)+1 FROM ' . $table . ' WHERE ' . $defaultOrder . ' >  bw.' . $defaultOrder . ') AS rank';
+
 		if($this->search !== null) {
 			$search = '%' . $this->search . '%';
 			$stmt = $this->getInjector()->getDB()->prepare("SELECT *, " . $rank . " FROM " . $table . " bw WHERE `name` LIKE :name ORDER BY " . $this->order . " " . $this->orderDirection . " LIMIT " . $pageStart . ", " . $this->perpage);
@@ -232,10 +233,13 @@ class BedwarsWebstats extends BedwarsDependency
 		}
 		
 		$fullUrl = array_shift($parts);
-		$parts = explode('&', $parts[1]);
+		$parts = explode('&', $parts[0]);
 		$params = '';
 		foreach($parts as $part) {
-			if(!in_array($part, $bwParams)) {
+			$getName = explode('=', $part);
+			$getName = $getName[0];
+			
+			if(!in_array($getName, $bwParams)) {
 				if($params == '') {
 					$params = '?' . $part;
 				} else {
