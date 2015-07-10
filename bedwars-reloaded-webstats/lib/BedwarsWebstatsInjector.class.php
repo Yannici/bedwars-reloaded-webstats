@@ -87,7 +87,7 @@ class BedwarsWebstatsInjector
 		$this->router = new BedwarsRouter();
 		
 		if(!isset($config['database'])) {
-			$this->db = new BedwarsDatabase(['database' => []]);
+			$this->db = new BedwarsDatabase(array('database' => array()));
 		}
 		
 		$this->db = new BedwarsDatabase($config['database']);
