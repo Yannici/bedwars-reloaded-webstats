@@ -88,6 +88,7 @@ class BedwarsWebstatsInjector
 		
 		if(!isset($config['database'])) {
 			$this->db = new BedwarsDatabase(array('database' => array()));
+			return;
 		}
 		
 		$this->db = new BedwarsDatabase($config['database']);
